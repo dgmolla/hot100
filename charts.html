@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Billboard Hot 100 Tracks Over Time</title>
+<body>
+  <script src="http://d3js.org/d3.v6.min.js"></script>
+  <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
+  <link href="style.css" rel="stylesheet">
+  <div id="layout">
+    <div id="title" class="frame">
+      <p>Billboard Hot 100 Tracks Over Time</p>
+    </div>
+    <div class="row">
+      <div id="visualization" class="frame">
+        <svg class="chart"></svg>
+        <script src="charts.js"></script>
+      </div>
+      <div id="filters" class="frame">
+        <label for="type">Type:</label>
+        <input type="text" id="mytype" readonly style="border:0; color:#f6931f; font-weight:bold;" value="All">
+        <br>
+        <select id='myselectform'>
+          <option value="all">All</option>
+          <option value="Pop">Pop</option>
+          <option value="Hip-Hop/Rap">Hip-Hop/Rap</option>
+          <option value="R&B">R&B</option>
+          <option value="Country">Country</option>
+          <option value="Rock">Rock</option>
+        </select>
+        <br/><br/>
+        <p>Volume</p>
+        <div id="vol" class="slider-range"></div>
+        <label for="volamount">Volume range:</label>
+        <input type="text" id="volamount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+        <br/><br/>
+        <p>Delta</p>
+        <div id="delta" class="slider-range"></div>
+        <label for="deltaamount">Delta range:</label>
+        <input type="text" id="deltaamount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+
+        <script type="text/javascript">
+          document.getElementById("myselectform").onchange = function () {
+            $("#mytype").val(this.value);
+            filterData("type", this.value);
+          }
+        </script>
+      </div>
+    </div>
+</body>
+</html>
