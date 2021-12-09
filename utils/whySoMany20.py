@@ -4,7 +4,7 @@ import pandas as pd
 #investigating commonality of 20 weeks on the charts
 #seems legit
 
-df = pd.DataFrame(pd.read_csv("utils/chartsRaw.csv", parse_dates=["date"]))
+df = pd.DataFrame(pd.read_csv("chartsRaw.csv", parse_dates=["date"]))
 
 df = df[df['date'].dt.year > 1979]
 df = df[df['peak-rank'] <= 40]
