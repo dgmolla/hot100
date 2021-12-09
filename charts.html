@@ -1,48 +1,86 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<title>Billboard Hot 100 Tracks Over Time</title>
+<title>Billboard's Top 40 Hit Songs Over Time</title>
 <body>
   <script src="http://d3js.org/d3.v6.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js" integrity="sha512-wNH6xsp2n8CfB91nrBtfc4sfLwYPBMjSWVUwQOp60AYYXH6i8yCwuKFZ4rgK2i6pQek/b+bSyR7b01/922IBzQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
   <script src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+  <link type="text/css" href="style.css" rel="stylesheet">
   <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
-  <link href="style.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <div id="layout">
     <div id="title" class="frame">
-      <p>Billboard Hot 100 Tracks Over Time</p>
+      <p style="font-size: 42px">billboard's top 40 hit songs over time</p>
     </div>
     <div class="row">
       <div id="visualization" class="frame">
         <svg class="chart"></svg>
+        <div class="legend">
+          <legend style="font-size:26px">legend</legend>
+          <br><br>
+          <i class="fa fa-square" style="font-size:16px;color:orange"></i><i>pop</i>
+          <i class="fa fa-square" style="font-size:16px;color:green"></i><i>hip-hop</i>
+          <i class="fa fa-square" style="font-size:16px;color:purple"></i><i>r&b</i>
+          <i class="fa fa-square" style="font-size:16px;color:blue"></i><i>rock</i>
+          <i class="fa fa-square" style="font-size:16px;color:red"></i><i>electronic</i>
+          <i class="fa fa-square" style="font-size:16px;color:brown"></i><i>blues</i>
+          <br><br>
+          <p>🕺 <u>danceability:</u> how suitable a track is for dancing based on a combination of musical elements including tempo, rhythm stability, beat strength, and overall regularity. a value of 0.0 is least danceable and 1.0 is most danceable.</p>
+          <br>
+          <p>🪕 <u>acousticness:</u> a confidence measure from 0.0 to 1.0 of whether the track is acoustic. 1.0 represents high confidence the track is acoustic.</p>
+          <br>
+          <p>😡/😁 <u>valence:</u> a measure from 0.0 to 1.0 describing the musical positiveness conveyed by a track. tracks with high valence sound more positive (e.g. happy, cheerful, euphoric), while tracks with low valence sound more negative (e.g. sad, depressed, angry).</p>
+          <br>
+          <p>🔊 <u>loudness:</u> the overall loudness of a track in decibels (dB). loudness values are averaged across the entire track and are useful for comparing relative loudness of tracks.</p>
+          <br>
+          <p>*audio attributes from Spotify api</p>
+
+        </div>
+
+
         <script src="charts.js"></script>
       </div>
       <div id="filters" class="frame">
-        <label for="type">Type:</label>
-        <input type="text" id="mytype" readonly style="border:0; color:#f6931f; font-weight:bold;" value="All">
+        <label for="genre">genre:</label>
+        <input type="text" id="mygenre" readonly style="border:0; color:#f6931f; font-weight:bold;" value="all">
         <br>
         <select id='myselectform'>
-          <option value="all">All</option>
-          <option value="Pop">Pop</option>
-          <option value="Hip-Hop/Rap">Hip-Hop/Rap</option>
-          <option value="R&B">R&B</option>
-          <option value="Country">Country</option>
-          <option value="Rock">Rock</option>
+          <option value="all">all</option>
+          <option value="pop">pop</option>
+          <option value="hip hop">hip-hop/rap</option>
+          <option value="r&b">r&b</option>
+          <option value="rock">rock</option>
+          <option value="electronic">electronic</option>
+          <option value="blues">blues</option>
         </select>
         <br/><br/>
-        <p>Volume</p>
-        <div id="vol" class="slider-range"></div>
-        <label for="volamount">Volume range:</label>
-        <input type="text" id="volamount" readonly style="border:0; color:#f6931f; font-weight:bold;">
         <br/><br/>
-        <p>Delta</p>
-        <div id="delta" class="slider-range"></div>
-        <label for="deltaamount">Delta range:</label>
-        <input type="text" id="deltaamount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+        <p>peak rank</p>
+        <div id="peak" class="slider-range"></div>
+        <input type="text" id="peakRank" class="transbox" readonly style="border:0; color:#f6931f; font-weight:bold;">
+        <br></br>
+        <br></br>
+        <p>🕺</p>
+        <div id="dance" class="slider-range"></div>
+        <input type="text" id="danceability" class="transbox" readonly style="border:0; color:#f6931f; font-weight:bold;">
+        <br/><br/>
+        <p>🪕</p>
+        <div id="acoustic" class="slider-range"></div>
+        <input type="text" id="acousticness" class="transbox" readonly style="border:0; color:#f6931f; font-weight:bold;">
+        <br/><br/>
+        <p>😡/😁</p>
+        <div id="valenc" class="slider-range"></div>
+        <input type="text" id="valence" class="transbox" readonly style="border:0; color:#f6931f; font-weight:bold;">
+        <br/><br/>
+        <p>🔊</p>
+        <div id="loud" class="slider-range"></div>
+        <input type="text" id="loudness" class="transbox" readonly style="border:0; color:#f6931f; font-weight:bold;">
 
         <script type="text/javascript">
           document.getElementById("myselectform").onchange = function () {
-            $("#mytype").val(this.value);
-            filterData("type", this.value);
+            $("#mygenre").val(this.value);
+            filterData("genre", this.value);
           }
         </script>
       </div>

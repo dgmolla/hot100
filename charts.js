@@ -4,14 +4,27 @@ let w = width - margin.left - margin.right;
 let h = height - margin.top - margin.bottom;
 
 let dataset, maxVol, maxPrice, maxeValue, maxDelta, ranges, filter_query;
-let chart, tooltip, x, y, col;
-let attributes = ["weeksOnBoard", "date", "peakRank"];// list of attributes
+let chart, tooltip, legend, x, y, col;
+let attributes = ["genre", "weeksOnBoard", "date", "peakRank", "danceability", "acousticness", "valence", "loudness"];// list of attributes
+
+var myFormat = d3.timeFormat("%Y-%m-%d");
+var parseDate = d3.timeParse(myFormat);
 
 initiate()
 
 async function initiate() {
   // read and cleaning data
-  dataset = await d3.csv("charts.csv");
+  let charts = await d3.csv("charts.csv");
+  charts.forEach( (c, i) => {
+    c.date = parseDate(c.date);
+    c.weeksOnBoard = +c.weeksOnBoard;
+    c.peakRank = +c.peakRank;
+    c.danceability = +c.danceability;
+    c.acousticness = +c.acousticness;
+    c.loudness = +c.loudness;
+    c.valence = +c.valence;
+  })
+  dataset = charts;
 
   // get data statistics;
   // declare all ranges that are currently selected for sliders
@@ -20,10 +33,8 @@ async function initiate() {
   filter_query = [];
   for (let attr of attributes) {
     let column = dataset.map(d => d[attr]);
-    
-    ranges[attr] = attr !== "peakRank" 
-      ? [d3.min(column),d3.max(column)]
-      : [d3.max(column),d3.min(column)]
+
+    ranges[attr] = [d3.min(column),d3.max(column)]
 
     filter_query.push({
       key: attr,
@@ -34,44 +45,92 @@ async function initiate() {
     })
   }
 
-  // // define any slider functions here, since depend on max of variables
-  // $(function () {
-  //   $("#vol").slider({
-  //     range: true,
-  //     min: ranges.vol[0],
-  //     max: ranges.vol[1],
-  //     values: ranges.vol,
-  //     slide: function (event, ui) {
-  //       $("#volamount").val(ui.values[0] + " - " + ui.values[1]);
-  //       filterData("vol", ui.values);
-  //     }
-  //   });
-  //   $("#volamount").val($("#vol").slider("values", 0) +
-  //     " - " + $("#vol").slider("values", 1));
-  // });
+  // define any slider functions here, since depend on max of variables
+  $(function () {
+    $("#peak").slider({
+      range: true,
+      min: ranges.peakRank[0],
+      max: ranges.peakRank[1],
+      values: ranges.peakRank,
+      slide: function (event, ui) {
+        $("#peakRank").val(ui.values[0] + " - " + ui.values[1]);
+        filterData("peakRank", ui.values);
+      }
+    });
+    $("#peakRank").val($("#peak").slider("values", 0) +
+      " - " + $("#peak").slider("values", 1));
+  });
 
-  // $(function () {
-  //   $("#delta").slider({
-  //     range: true,
-  //     min: ranges.delta[0],
-  //     max: ranges.delta[1],
-  //     values: ranges.delta,
-  //     slide: function (event, ui) {
-  //       $("#deltaamount").val(ui.values[0] + " - " + ui.values[1]);
-  //       filterData("delta", ui.values);
-  //     }
-  //   });
-  //   $("#deltaamount").val($("#delta").slider("values", 0) +
-  //     " - " + $("#delta").slider("values", 1));
-  // });
+  $(function () {
+    $("#dance").slider({
+      range: true,
+      min: ranges.danceability[0],
+      max: ranges.danceability[1],
+      values: ranges.danceability,
+      step: .001,
+      slide: function (event, ui) {
+        $("#danceability").val(ui.values[0] + " - " + ui.values[1]);
+        filterData("danceability", ui.values);
+      }
+    });
+    $("#danceability").val($("#dance").slider("values", 0) +
+      " - " + $("#dance").slider("values", 1));
+  });
+
+  $(function () {
+    $("#acoustic").slider({
+      range: true,
+      min: ranges.acousticness[0],
+      max: ranges.acousticness[1],
+      values: ranges.acousticness,
+      step: .001,
+      slide: function (event, ui) {
+        $("#acousticness").val(ui.values[0] + " - " + ui.values[1]);
+        filterData("acousticness", ui.values);
+      }
+    });
+    $("#acousticness").val($("#acoustic").slider("values", 0) +
+      " - " + $("#acoustic").slider("values", 1));
+  });
+
+  $(function () {
+    $("#valenc").slider({
+      range: true,
+      min: ranges.valence[0],
+      max: ranges.valence[1],
+      step: .001,
+      values: ranges.valence,
+      slide: function (event, ui) {
+        $("#valence").val(ui.values[0] + " - " + ui.values[1]);
+        filterData("valence", ui.values);
+      }
+    });
+    $("#valence").val($("#valenc").slider("values", 0) +
+      " - " + $("#valenc").slider("values", 1));
+  });
+
+  $(function () {
+    $("#loud").slider({
+      range: true,
+      min: ranges.loudness[0],
+      max: ranges.loudness[1],
+      values: ranges.loudness,
+      slide: function (event, ui) {
+        $("#loudness").val(ui.values[0] + " - " + ui.values[1]);
+        filterData("loudness", ui.values);
+      }
+    });
+    $("#loudness").val($("#loud").slider("values", 0) +
+      " - " + $("#loud").slider("values", 1));
+  });
 
   // get scales
-  x = d3.scaleLinear()
-    .domain([0, (Math.ceil(ranges.date[1] / 50) + 1) * 50]) // some offset
+  x = d3.scaleTime()
+    .domain([ranges["date"][0], ranges["date"][1]]) // some offset
     .range([0, w]);
 
   y = d3.scaleLinear()
-    .domain([0, (Math.ceil(ranges.weeksOnBoard[1] / 50) + 1) * 50]) // some offset
+    .domain([0, ranges["weeksOnBoard"][1]]) // some offset
     .range([h, 0]);
 
   col = d3.scaleOrdinal(d3.schemeCategory10);
@@ -107,7 +166,7 @@ async function initiate() {
     .attr("dy", ".71em")
     .style("text-anchor", "end")
     .style("fill", "black")
-    .text("Weeks On Charts");
+    .text("Weeks On Board");
 
   console.log(ranges);
 
@@ -117,7 +176,7 @@ async function initiate() {
 
 function drawVis(dataset) { //draw the circiles initially and on each interaction with a control
   let circle = chart.selectAll("circle")
-    .data(dataset, d => d.artist); // assign key!!!
+    .data(dataset, d => d.song); // assign key!!!
 
   // filter out first
   circle.exit().remove();
@@ -126,7 +185,7 @@ function drawVis(dataset) { //draw the circiles initially and on each interactio
   circle.enter().append("circle")
     .attr("cx", d => x(d.date))
     .attr("cy", d => y(d.weeksOnBoard))
-    //.style("fill", d => col(d.type))
+    .style("fill", d => col(d.genre))
     .attr("r", 4)
     .style("stroke", "black")
     .style("opacity", 0.5)
@@ -135,9 +194,9 @@ function drawVis(dataset) { //draw the circiles initially and on each interactio
       tooltip.transition()
         .duration(200)
         .style("opacity", 1);
-      tooltip.html("Track <b>" + d.track + "</b>: " + "date=" + d.date + ", weeksOnBoard=" + d.weeksOnBoard + "<br>" + "peakRank=" + d.peakRank)
+      tooltip.html("Song: <b>" + d.song + "</b>: " + "Artist:" + d.artist + ", Date:" + d.date.toString().substring(4, 15) + "<br>Weeks on Charts: " + d.weeksOnBoard + "<br>" + "Peak Rank:" + d.peakRank)
         .style("left", (event.pageX + 5) + "px")
-        .style("top", (event.pageY - 28) + "px");
+        .style("top", (event.pageY - 60) + "px");
     })
     .on("mouseout", function (d, i) {
       d3.select(this).attr("r", 4);
@@ -146,7 +205,7 @@ function drawVis(dataset) { //draw the circiles initially and on each interactio
         .style("opacity", 0.5);
     });
 
-    console.log(dataset[0]["peakRank"])
+    //console.log(typeof dataset[0]["date"]);
 
 }
 
@@ -155,16 +214,25 @@ let patt = new RegExp("all");
 
 function filterData(_attr, values) {
   //HERE update filter query, filter the data, pass it to drawVis
-  console.log("ranges", ranges);
 
   let filtered = dataset;
+  let preSz = Object.keys(filtered).length
 
   ranges[_attr] = values;
 
-  filtered = filtered.filter(track => track['vol'] >= ranges['vol'][0] && track['vol'] <= ranges['vol'][1]);
-  filtered = filtered.filter(track => track['delta'] >= ranges['delta'][0] && track['delta'] <= ranges['delta'][1]);
-  filtered = ranges['type'] !== 'all' ? filtered.filter(track => track['type'] === ranges['type']) : filtered_data;
+  if(_attr === 'genre') {
+    
+    filtered = ranges['genre'] !== 'all' ? filtered.filter(track => track['genre'] === ranges['genre']) : filtered;
 
-  drawVis(filtered_data);
+  } else {
+
+    filtered = filtered.filter(track => track[_attr] >= values[0] && track[_attr] <= values[1]);
+  
+  }
+
+  console.log(preSz > Object.keys(filtered).length);
+  console.log(ranges)
+
+  drawVis(filtered);
 }
 
