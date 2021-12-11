@@ -214,16 +214,17 @@ function filterData(_attr, values) {
 
   ranges[_attr] = values;
 
-  if(_attr === 'genre') {
-    
-    filtered = ranges['genre'] !== 'all' ? filtered.filter(track => track['genre'] === ranges['genre']) : filtered;
-
-  } else {
-
-    filtered = filtered.filter(track => track[_attr] >= values[0] && track[_attr] <= values[1]);
   
-  }
-  console.log(ranges)
+  filtered = ranges['genre'] !== 'all' ? filtered.filter(track => track['genre'] === ranges['genre']) : filtered;
+
+  filtered = filtered.filter(track => track['peakRank'] >= ranges['peakRank'][0] && track['peakRank'] <= ranges['peakRank'][1]);
+  filtered = filtered.filter(track => track['danceability'] >= ranges['danceability'][0] && track['danceability'] <= ranges['danceability'][1]);
+  filtered = filtered.filter(track => track['acousticness'] >= ranges['acousticness'][0] && track['acousticness'] <= ranges['acousticness'][1]);
+  filtered = filtered.filter(track => track['valence'] >= ranges['valence'][0] && track['valence'] <= ranges['valence'][1]);
+  filtered = filtered.filter(track => track['loudness'] >= ranges['loudness'][0] && track['loudness'] <= ranges['loudness'][1]);
+
+
+  dataset = filtered;
 
   drawVis(filtered);
 }
