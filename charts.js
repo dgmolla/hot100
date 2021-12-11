@@ -38,14 +38,6 @@ async function initiate() {
     if (attr !== 'genre') {
       ranges[attr] = [d3.min(column),d3.max(column)]
     }
-
-    // filter_query.push({
-    //   key: attr,
-    //   range: [ // deep copy
-    //     ranges[attr][0],
-    //     ranges[attr][1]
-    //   ]
-    // })
   }
 
   // define any slider functions here, since depend on max of variables
@@ -197,7 +189,7 @@ function drawVis(dataset) { //draw the circiles initially and on each interactio
       tooltip.transition()
         .duration(200)
         .style("opacity", 1);
-      tooltip.html("Song: <b>" + d.song + "</b>: " + "Artist:" + d.artist + ", Date:" + d.date.toString().substring(4, 15) + "<br>Weeks on Charts: " + d.weeksOnBoard + "<br>" + "Peak Rank:" + d.peakRank)
+      tooltip.html("Song: <b>" + d.song + "</b> " + "<br>Artist: " + d.artist + "<br>Date: " + d.date.toString().substring(4, 15) + "<br>Weeks on Charts: " + d.weeksOnBoard + "<br>Peak Rank: " + d.peakRank)
         .style("left", (event.pageX + 5) + "px")
         .style("top", (event.pageY - 60) + "px");
     })

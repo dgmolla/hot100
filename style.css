@@ -70,12 +70,13 @@ input[type=text] {
 
 div.tooltip {
   position: absolute;
+  display: inline-block;
   text-align: center;
-  width: 200px;
-  height: 60px;
   font: 12px sans-serif;
+  padding: 7.5px;
   background: lightsteelblue;
   border: 0px;
   pointer-events: none;
   opacity: .7;
+  z-index: 999;
 }
