@@ -8,7 +8,7 @@ import urllib.parse
 from utils import helpers
 
 #let's get started cleaning up the raw billboard hot 100 all time data
-df = pd.DataFrame(pd.read_csv("utils/chartsRaw.csv", parse_dates=["date"]))
+df = pd.DataFrame(pd.read_csv("../static/chartsRaw.csv", parse_dates=["date"]))
 
 #remove duplicate song entries
 df = df.groupby(["artist", "song"]).agg(
@@ -196,6 +196,6 @@ df['genre'] = genre
 df.replace("", np.nan, inplace=True)
 df = df.dropna()
 
-df.to_csv("charts.csv")
+df.to_csv("../static/charts.csv")
 
 

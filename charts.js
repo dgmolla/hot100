@@ -14,7 +14,7 @@ initiate()
 
 async function initiate() {
   // read and cleaning data
-  let charts = await d3.csv("/utils/charts.csv");
+  let charts = await d3.csv("/static/charts.csv");
   charts.forEach( (c, i) => {
     c.date = parseDate(c.date);
     c.weeksOnBoard = +c.weeksOnBoard;
