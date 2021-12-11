@@ -29,20 +29,23 @@ async function initiate() {
   // get data statistics;
   // declare all ranges that are currently selected for sliders
   ranges = {};
+  
   //note how filter query stores all attributes current ranges
   filter_query = [];
   for (let attr of attributes) {
     let column = dataset.map(d => d[attr]);
 
-    ranges[attr] = [d3.min(column),d3.max(column)]
+    if (attr !== 'genre') {
+      ranges[attr] = [d3.min(column),d3.max(column)]
+    }
 
-    filter_query.push({
-      key: attr,
-      range: [ // deep copy
-        ranges[attr][0],
-        ranges[attr][1]
-      ]
-    })
+    // filter_query.push({
+    //   key: attr,
+    //   range: [ // deep copy
+    //     ranges[attr][0],
+    //     ranges[attr][1]
+    //   ]
+    // })
   }
 
   // define any slider functions here, since depend on max of variables
@@ -216,7 +219,6 @@ function filterData(_attr, values) {
   //HERE update filter query, filter the data, pass it to drawVis
 
   let filtered = dataset;
-  let preSz = Object.keys(filtered).length
 
   ranges[_attr] = values;
 
@@ -229,8 +231,6 @@ function filterData(_attr, values) {
     filtered = filtered.filter(track => track[_attr] >= values[0] && track[_attr] <= values[1]);
   
   }
-
-  console.log(preSz > Object.keys(filtered).length);
   console.log(ranges)
 
   drawVis(filtered);
