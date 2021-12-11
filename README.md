@@ -1,4 +1,4 @@
-Check out this visualization of Billboard's hottest Top 40 songs over the past 40 years:
+Check out this visualization of Billboard's hottest Top 40 songs over the past 40 years!
 
 https://dgmolla.github.io/hot100/
 
