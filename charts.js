@@ -223,9 +223,6 @@ function filterData(_attr, values) {
   filtered = filtered.filter(track => track['valence'] >= ranges['valence'][0] && track['valence'] <= ranges['valence'][1]);
   filtered = filtered.filter(track => track['loudness'] >= ranges['loudness'][0] && track['loudness'] <= ranges['loudness'][1]);
 
-
-  dataset = filtered;
-
   drawVis(filtered);
 }
 
