@@ -6,7 +6,7 @@ import json
 import requests
 import urllib.parse
 import config
-from utils import helpers
+import helpers
 
 #let's get started cleaning up the raw billboard hot 100 all time data
 df = pd.DataFrame(pd.read_csv("chartsRaw.csv", parse_dates=["date"]))
