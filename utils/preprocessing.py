@@ -25,31 +25,32 @@ df = df[df['peak-rank'] <= 40]
 #rename columns, notice there are no song attributes/genre... need to grab from spotify api
 df = df.rename(columns={"weeks-on-board": "weeksOnBoard", "peak-rank": "peakRank"})
 
-#let's use the incomplete results from our last tries to save api calls
-attributes = collections.defaultdict(list)
-incompleteAtt, incompleteGenre = helpers.att, helpers.g
-
-#let's keep track of num unique artists, use as stopping condition
-uniqueArtists = set()
-
-#map to keep track of song genres, keys will be artists
+#map to keep track of song genres, keys are artists
 genres = {}
 
-for key in incompleteAtt.keys():
-	curr = incompleteAtt[key]
-	uniqueArtists.add(key[0])
+#map to keep track of song attributes, keys are song tuples - eg: (artist, song)
+attributes = collections.defaultdict(list)
 
-	if key[0] not in genres:
-		genres[key[0]] = incompleteGenre[key[0]]
+#this code block was using incomplete results from previous failed/incomplete tries to save api calls
+# #let's keep track of num unique artists, use as stopping condition
+# uniqueArtists = set()
+# incompleteAtt, incompleteGenre = helpers.att, helpers.g
 
-	if not curr:
-		continue
+# for key in incompleteAtt.keys():
+# 	curr = incompleteAtt[key]
+# 	uniqueArtists.add(key[0])
 
-	#using song objects (artist, song) as keys in the attributes map
-	if len(curr) > 1:
-		attributes[key] = [curr[0], curr[1], curr[2], curr[3]]
-	else:
-		attributes[key] = [curr[0][0], curr[0][1], curr[0][2], curr[0][3]]
+# 	if key[0] not in genres:
+# 		genres[key[0]] = incompleteGenre[key[0]]
+
+# 	if not curr:
+# 		continue
+
+# 	#using song objects (artist, song) as keys in the attributes map
+# 	if len(curr) > 1:
+# 		attributes[key] = [curr[0], curr[1], curr[2], curr[3]]
+# 	else:
+# 		attributes[key] = [curr[0][0], curr[0][1], curr[0][2], curr[0][3]]
 
 #get spotify auth token
 clientID = config.clientID
@@ -71,7 +72,7 @@ artists, tracks = [], []
 
 #this block is looping until every song has its attributes/genre collected
 #some songs have no data in the api, so their corresponding vals will be NaN
-while len(uniqueArtists) > len(genres):
+while len(df) > len(attributes):
 	
 	for song, row in df.iterrows():
 		if song in attributes and song[0] in genres:
@@ -158,7 +159,7 @@ while len(uniqueArtists) > len(genres):
 					break
 
 		else:
-			#attributes[song] = [np.nan, np.nan, np.nan, np.nan]
+			attributes[song] = [np.nan, np.nan, np.nan, np.nan]
 			genres[song[0]] = ""
 			continue
 
