@@ -5,6 +5,7 @@ import csv
 import json
 import requests
 import urllib.parse
+import config
 from utils import helpers
 
 #let's get started cleaning up the raw billboard hot 100 all time data
@@ -51,8 +52,8 @@ for key in incompleteAtt.keys():
 		attributes[key] = [curr[0][0], curr[0][1], curr[0][2], curr[0][3]]
 
 #get spotify auth token
-clientID = "837c3592e7554c378b5233f97ffd9f37"
-clientSecret = "ca64e353952746fbbbf2cd7e15cda9f2"
+clientID = config.clientID
+clientSecret = config.clientSecret
 
 authResponse = requests.post("https://accounts.spotify.com/api/token", {
     'grant_type': 'client_credentials',

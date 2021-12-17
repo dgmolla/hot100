@@ -7,6 +7,9 @@ yarn-error.log*
 firebase-debug.log*
 firebase-debug.*.log*
 
+#python config for api keys
+config.py
+
 # Firebase cache
 .firebase/
 
