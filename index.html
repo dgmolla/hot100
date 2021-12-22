@@ -41,8 +41,8 @@
         <script src="charts.js"></script>
       </div>
       <div id="filters" class="frame">
-        <label for="genre">genre:</label>
-        <input type="text" id="myGenre" readonly style="border:0; color:#f6931f; font-weight:bold;" value="all">
+        <label for="genre">genre</label>
+        <input type="text" id="myGenre" readonly style="width: 0; height: 0; opacity: 0" value="all">
         <br>
         <select id='myselectform'>
           <option value="all">all</option>
@@ -53,30 +53,34 @@
           <option value="electronic">electronic</option>
           <option value="blues">blues</option>
         </select>
-        <br/><br/>
-        <label for="artist">artist:</label>
+        
+        <br>
+        <br>
+        
+        <label for="artist">artist</label>
+        <br>
         <input type="search" id="myArtist" value="all" placeholder="search an artist...">
-        <button id="searchButton">go</button>
+        <button id="searchButton">🔍</button>
 
-        <br/><br/>
-        <br/><br/>
+        <br>
+        <br>
+
         <p>peak rank</p>
         <div id="peak" class="slider-range"></div>
         <input type="text" id="peakRank" class="transbox" readonly style="border:0; color:#f6931f; font-weight:bold;">
-        <br></br>
-        <br></br>
+        <br>
         <p>🕺</p>
         <div id="dance" class="slider-range"></div>
         <input type="text" id="danceability" class="transbox" readonly style="border:0; color:#f6931f; font-weight:bold;">
-        <br/><br/>
+        <br>
         <p>🪕</p>
         <div id="acoustic" class="slider-range"></div>
         <input type="text" id="acousticness" class="transbox" readonly style="border:0; color:#f6931f; font-weight:bold;">
-        <br/><br/>
+        <br>
         <p>😡/😁</p>
         <div id="valenc" class="slider-range"></div>
         <input type="text" id="valence" class="transbox" readonly style="border:0; color:#f6931f; font-weight:bold;">
-        <br/><br/>
+        <br>
         <p>🔊</p>
         <div id="loud" class="slider-range"></div>
         <input type="text" id="loudness" class="transbox" readonly style="border:0; color:#f6931f; font-weight:bold;">
