@@ -5,7 +5,7 @@ let h = height - margin.top - margin.bottom;
 
 let dataset, maxVol, maxPrice, maxeValue, maxDelta, ranges, filter_query;
 let chart, tooltip, legend, x, y, col;
-let attributes = ["genre", "weeksOnBoard", "date", "peakRank", "danceability", "acousticness", "valence", "loudness"];// list of attributes
+let attributes = ["artist", "genre", "weeksOnBoard", "date", "peakRank", "danceability", "acousticness", "valence", "loudness"];// list of attributes
 
 var myFormat = d3.timeFormat("%Y-%m-%d");
 var parseDate = d3.timeParse(myFormat);
@@ -35,8 +35,10 @@ async function initiate() {
   for (let attr of attributes) {
     let column = dataset.map(d => d[attr]);
 
-    if (attr !== 'genre') {
+    if (attr !== 'genre' && attr !== 'artist') {
       ranges[attr] = [d3.min(column),d3.max(column)]
+    } else {
+      ranges[attr] = 'all';
     }
   }
 
@@ -209,12 +211,18 @@ let patt = new RegExp("all");
 
 function filterData(_attr, values) {
   //HERE update filter query, filter the data, pass it to drawVis
-
+  console.log(values);
   let filtered = dataset;
+
+  //handle empty artist search query
+  if (_attr === 'artist' && values == "") {
+    values = "all";
+  }
 
   ranges[_attr] = values;
 
   filtered = ranges['genre'] !== 'all' ? filtered.filter(track => track['genre'] === ranges['genre']) : filtered;
+  filtered = ranges['artist'] !== 'all' ? filtered.filter(track => track['artist'].toLowerCase().includes(ranges['artist'].toLowerCase())) : filtered;
 
   filtered = filtered.filter(track => track['peakRank'] >= ranges['peakRank'][0] && track['peakRank'] <= ranges['peakRank'][1]);
   filtered = filtered.filter(track => track['danceability'] >= ranges['danceability'][0] && track['danceability'] <= ranges['danceability'][1]);

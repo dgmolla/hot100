@@ -42,7 +42,7 @@
       </div>
       <div id="filters" class="frame">
         <label for="genre">genre:</label>
-        <input type="text" id="mygenre" readonly style="border:0; color:#f6931f; font-weight:bold;" value="all">
+        <input type="text" id="myGenre" readonly style="border:0; color:#f6931f; font-weight:bold;" value="all">
         <br>
         <select id='myselectform'>
           <option value="all">all</option>
@@ -53,6 +53,11 @@
           <option value="electronic">electronic</option>
           <option value="blues">blues</option>
         </select>
+        <br/><br/>
+        <label for="artist">artist:</label>
+        <input type="search" id="myArtist" value="all" placeholder="search an artist...">
+        <button id="searchButton">go</button>
+
         <br/><br/>
         <br/><br/>
         <p>peak rank</p>
@@ -78,8 +83,12 @@
 
         <script type="text/javascript">
           document.getElementById("myselectform").onchange = function () {
-            $("#mygenre").val(this.value);
+            $("#myGenre").val(this.value);
             filterData("genre", this.value);
+          }
+          document.getElementById("searchButton").onclick = function () {
+            let value = $("#myArtist").val();
+            filterData("artist", value);
           }
         </script>
       </div>
